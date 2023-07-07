@@ -2,19 +2,33 @@
 
 
 @section('titulo')
-Lista de Permisos
+Historial de Permisos
 
 @endsection
 
 
 @section('contenido')
 
-<div class="authButtons basis-1/4 flex flex-col items-center justify-center">
+<div class="authButtons basis-1/4 flex flex-row items-center justify-center gap-2">
     <a href="{{route('principal')}}">
-        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2">
-           <span class="fa-solid fa-left-long"></span> VOLVER
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded mb-2">
+           <span class="fa-solid fa-left-long"></span> Regresar
         </button>
     </a>
+
+    <form action="{{route('downloadPdfhistorial')}}" method="POST" target="__blank">
+        @csrf
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded mb-2">
+            <span class="fa-solid fa-file-pdf"></span> Reporte PDF
+        </button>
+    </form>
+
+    <a href="{{route('papeletasExcel')}}">
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded mb-2">
+            <span class="fa-solid fa-file-excel"></span> Reporte EXCEL
+        </button>
+    </a>
+
 </div>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -90,19 +104,31 @@ Lista de Permisos
                     {{$item->fecha_fin}}
                 </td>
                 <td class="px-6 py-4">
-                    <a href="{{route('editar',$item->id)}}">
-                        <button class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded mb-2" >
-                            <span class="fa-solid fa-user-pen fa-fw"></span> EDITAR
-                        </button>
-                    </a>
+                    <div class="authButtons basis-1/4 flex flex-row items-center justify-center gap-1">
 
-                    <form action="{{route('destroy',$item->id )}}" method="POST" class="elim">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                            <span class="fa-solid fa-user-xmark"></span> BORRAR
-                        </button>
-                    </form>
+                        <a href="{{route('editar',$item->id)}}">
+                            <button class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-1 px-2 rounded" >
+                                <span class="fa-solid fa-marker"></span>
+                            </button>
+                        </a>
+    
+                        <form action="{{route('destroy',$item->id )}}" method="POST" class="elim">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                                <span class="fa-solid fa-trash-can"></span>
+                            </button>
+                        </form>
+
+                        <form action="{{route('viewPdf',$item->id)}}" method="POST" target="__blank">
+                            @csrf
+                            <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" >
+                                <span class="fa-solid fa-print"></span>
+                            </button>
+                        </form>
+                        
+                    </div>
+                    
                 </td>
             </tr>
             @endforeach
@@ -141,7 +167,13 @@ Lista de Permisos
             }).then((result) => {
                 if(result.isConfirmed){
                     this.submit();
-                    Swal.fire('Eliminado','La propiedad ha sido elimidado exitosamente','success');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Eliminado correctamente!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+    
                 }
             })
         },false)

@@ -23,8 +23,12 @@ return new class extends Migration
             $table->string('observacion');
             $table->string('fecha_ini');
             $table->string('fecha_fin');
-
+            //llavae foranea
+            $table->unsignedBigInteger('usuario_id');
             $table->timestamps();
+
+            $table->foreign('usuario_id')->references('id')
+                ->on('usuarios');
         });
     }
 

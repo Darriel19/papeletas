@@ -11,8 +11,8 @@ Editar Permisos
 
 <div class="authButtons basis-1/4 flex flex-col items-center justify-center">
     <a href="{{route('listado')}}">
-        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2">
-           <span class="fa-solid fa-left-long"></span> VOLVER
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded mb-2">
+           <span class="fa-solid fa-left-long"></span> Regresar
         </button>
     </a>
 </div>

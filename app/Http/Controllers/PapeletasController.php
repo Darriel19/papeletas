@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Papeletas;
 use Illuminate\Http\Request;
 
+use UAParser\Parser;
+use Illuminate\Support\Facades\DB;
+
+//obtner la zona horaria
+date_default_timezone_set('America/Lima'); 
+
 class PapeletasController extends Controller
 {
     /**
@@ -15,31 +21,6 @@ class PapeletasController extends Controller
         $listado = Papeletas::latest()->paginate(5);
 
         return view('listado', compact('listado'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    
-    public function store(Request $request)
-    {
-
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Papeletas $papeletas)
-    {
-        //
     }
 
     /**
@@ -73,7 +54,32 @@ class PapeletasController extends Controller
         ]);
 
         $lista = $request->all();
+        ////////////////////
+        //obtener la ip del usuario
+        $ipUsuario = request()->ip();
+        // Obtener el User-Agent del usuario
+        $userAgent = $request->header('User-Agent');
 
+        // Crear un analizador de User-Agent
+        $parser = Parser::create();
+
+        // Analizar el User-Agent
+        $result = $parser->parse($userAgent);
+
+        // Obtener el sistema operativo
+        $operatingSystem = $result->os->toString();
+        
+        //si se crea un usuario se almacena el SO
+
+        $so = $operatingSystem;
+        DB::table('actividades')->insert([
+            'actividad' => 'ACTUALIZADO',
+            'ip' => $ipUsuario,
+            'fecha'=> date('Y-m-d'),
+            'hora' => date('H:i'),
+            'so' => $so
+        ]);
+        //////////////////////////////
         $listado->update($lista);
 
         return redirect()->route('listado')->with('mensaje','1');
@@ -82,10 +88,35 @@ class PapeletasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id , Request $request)
     {
         $listado = Papeletas::find($id);
+        ////////////////////
+        //obtener la ip del usuario
+        $ipUsuario = request()->ip();
+        // Obtener el User-Agent del usuario
+        $userAgent = $request->header('User-Agent');
 
+        // Crear un analizador de User-Agent
+        $parser = Parser::create();
+
+        // Analizar el User-Agent
+        $result = $parser->parse($userAgent);
+
+        // Obtener el sistema operativo
+        $operatingSystem = $result->os->toString();
+        
+        //si se crea un usuario se almacena el SO
+
+        $so = $operatingSystem;
+        DB::table('actividades')->insert([
+            'actividad' => 'ELIMINADO',
+            'ip' => $ipUsuario,
+            'fecha'=> date('Y-m-d'),
+            'hora' => date('H:i'),
+            'so' => $so
+        ]);
+        //////////////////////////////
         $listado->delete();
         return redirect()->route('listado');
     }

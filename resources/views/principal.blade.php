@@ -37,9 +37,16 @@ Crear Permiso
                 <button class="bg-green-600 hover:bg-green-700 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white rounded-lg mb-4"><span class="fa-solid fa-file-pen"></span> Ver historial</button>
             </a>
             
+            <a href="{{route('actividad')}}">
+                <button class="bg-gray-500 hover:bg-gray-400 transition-colors cursor-pointer uppercase font-bold w-full p-3 text-white
+                 rounded-lg mb-4"><span class="fa-solid fa-list-check"></span> Registro de actividad</button>
+            </a>
         </div>
     </div>
+    
 </div>
+
+
 @endsection
 
 @section('script')

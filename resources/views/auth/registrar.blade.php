@@ -8,12 +8,18 @@ Registrar permiso
     <?php //var_dump($consulta)?>
     <?php //echo $consulta[0]['nombre']?>
     
-    <div class="authButtons basis-1/4 flex flex-col items-center justify-center">
+    <div class="authButtons basis-1/4 flex flex-row items-center justify-center gap-2">
         <a href="{{route('principal')}}">
             <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2">
                <span class="fa-solid fa-left-long"></span> VOLVER
             </button>
         </a>
+
+        {{-- <a href="{{route('registro')}}">
+            <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-2">
+               <span class="fa-solid fa-print"></span> IMPRIMIR
+            </button>
+        </a> --}}
     </div>
 
     <form action="{{route('store')}}" method="POST">
@@ -36,10 +42,12 @@ Registrar permiso
                 </header>
 
                 <div class="mb-5">
+                    <input type="text" id="usuario_id" name="usuario_id" placeholder="id" class="border w-full rounded-lg p-2" value="{{$consulta[0]['id']}}" required hidden>
+
                     <label for="dni" class="mb-2 block uppercase text-gray-500 font-bold">
                         N° Tarjeta
                     </label>
-                    <input type="text" id="dni" name="dni" placeholder="N° Tarjeta" class="border w-full rounded-lg p-2" value="{{$consulta[0]['tarjeta']}}" required>
+                    <input type="text" id="dni" name="dni" placeholder="N° Tarjeta" class="border w-full rounded-lg p-2" value="{{$consulta[0]['le']}}" required>
 
                 </div>
                 
@@ -61,7 +69,7 @@ Registrar permiso
                     <label for="dependencia" class="mb-2 block uppercase text-gray-500 font-bold">
                         Dependencia
                     </label>
-                    <input type="text" id="dependencia" name="dependencia" placeholder="Dependencia" class="border w-full rounded-lg p-2" value="{{$consulta[0]['oficina']}}" required>
+                    <input type="text" id="dependencia" name="dependencia" placeholder="Dependencia" class="border w-full rounded-lg p-2" value="{{$consulta[0]['oficina']}}" required onkeyup='adddependencia();'>
                 </div>
 
                 <div class="mb-5">
@@ -146,14 +154,14 @@ Registrar permiso
                     <label for="" class="mb-2 block uppercase text-gray-500 font-bold">
                         N° Tarjeta
                     </label>
-                    <input type="text" placeholder="N° Tarjeta" class="border w-full rounded-lg p-2" value="{{$consulta[0]['tarjeta']}}">
+                    <input type="text" placeholder="N° Tarjeta" class="border w-full rounded-lg p-2" value="{{$consulta[0]['le']}}">
                 </div>
 
                 <div class="mb-5">
                     <label for="" class="mb-2 block uppercase text-gray-500 font-bold">
                         Nombre
                     </label>
-                    <input type="text" placeholder="Nombre" class="border w-full rounded-lg p-2" value="{{$consulta[0]['nombre']}}">
+                    <input type="text" placeholder="Nombre" class="border w-full rounded-lg p-2" value="{{$consulta[0]['nombre'] .' '.$consulta[0]['apepater'].' '.$consulta[0]['apemater']}}">
                 </div>
 
                 <div class="mb-5">
@@ -167,12 +175,12 @@ Registrar permiso
                     <label for="" class="mb-2 block uppercase text-gray-500 font-bold">
                         Dependencia
                     </label>
-                    <input type="text" placeholder="Dependencia" class="border w-full rounded-lg p-2" value="{{$consulta[0]['oficina']}}">
+                    <input type="text" placeholder="Dependencia" class="border w-full rounded-lg p-2 dependencia" value="{{$consulta[0]['oficina']}}">
                 </div>
 
                 <div class="mb-5">
                     <label for="observaciones" class="mb-2 block uppercase text-gray-500 font-bold">
-                        Observaciones
+                        Observaciones (Opcional)
                     </label>
                     <textarea rows="4" class="border w-full rounded-lg p-2 observacion"></textarea>
                 </div>
@@ -226,6 +234,17 @@ Registrar permiso
             {
             var elements = document.querySelectorAll(".lugar");
             var valor = document.getElementById('lugar').value;
+
+            for(var i = 0; i < elements.length;i++)
+            {
+                elements[i].value = valor;
+            }
+        }
+
+        function adddependencia()
+            {
+            var elements = document.querySelectorAll(".dependencia");
+            var valor = document.getElementById('dependencia').value;
 
             for(var i = 0; i < elements.length;i++)
             {
